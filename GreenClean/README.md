@@ -1,8 +1,8 @@
 # GreenClean
 
-2주 팀 프로젝트에서 만든 코드를 기능과 책임 기준으로 다시 분류해 보관하고, 그중 제가 직접 구현하거나 수정한 부분을 구분해 정리합니다.
+2주 팀 프로젝트의 C# 코드를 포트폴리오 열람용으로 다시 분류하고, 제가 직접 구현하거나 수정한 범위를 구분해 정리합니다.
 
-> `Scripts` 폴더에는 팀 프로젝트의 C# 스크립트가 함께 들어 있습니다. 파일이 이 저장소에 있다는 이유만으로 파일 전체를 제가 작성한 것은 아닙니다. 이 저장소의 폴더 구조는 포트폴리오 열람을 위해 다시 정리한 것이므로 원본 Unity 프로젝트의 경로와 다를 수 있습니다.
+> `Scripts`에는 팀 코드가 함께 들어 있습니다. 파일이 존재한다는 이유만으로 파일 전체를 제 구현으로 설명하지 않습니다. 폴더 경로는 원본 Unity 프로젝트와 다를 수 있습니다.
 
 ## 전체 구조
 
@@ -16,35 +16,30 @@ flowchart LR
     D[데이터] <--> S
 ```
 
-## 코드 폴더 구조
+## 코드 위치
 
 - `Scripts/Systems/Blackboard` — 공유 상태와 조건 판정
 - `Scripts/Systems/MascotReaction` — 마스코트 반응 데이터와 실행 구조
-- `Scripts/Editor/Blackboard` — 블랙보드 편집기 도구
-- `Scripts/Editor/MascotReaction` — 마스코트 반응 편집기 도구
-- `Scripts/Gameplay/Cards` — 카드와 덱
-- `Scripts/Gameplay/Grid` — 타일과 격자
-- `Scripts/GameFlow` — 전체 게임 진행과 장면 관리
-- `Scripts/UI` — 화면 표시
-- `Scripts/Data/Save` — 저장 데이터 관련 팀 코드
-- 그 외 `Audio`, `Settings`, `Common`, `Debug`
+- `Scripts/Editor/Blackboard`, `Scripts/Editor/MascotReaction` — 전용 편집기 도구
+- `Scripts/Gameplay` — 카드와 격자
+- 그 외 `GameFlow`, `UI`, `Data`, `Audio`, `Settings`, `Common`, `Debug`
 
 ## 제가 주도적으로 구현한 부분
 
 ### 블랙보드 기반 상태 공유
 
-여러 게임 시스템에서 공유해야 하는 진행 상태를 `BlackboardKey`와 타입 스키마로 관리하도록 구성했습니다.
-
 ```mermaid
 flowchart LR
     A[카드 사용·콤보 등 게임 이벤트] --> B[GameProgressBlackboard]
-    B --> C[키별 현재 값]
     D[BlackboardSchema] --> B
     E[BlackboardDefaults] --> B
-    C --> F[조건 판정에서 조회]
+    B --> C[키별 현재 값]
+    C --> F[조건 판정]
 ```
 
-관련 코드 예시:
+키별 자료형을 스키마에 정의하고 기본값과 런타임 값을 분리했습니다. Unity 직렬화 제약 때문에 범용 `object` 대신 지원 자료형별 값을 명시적으로 보관했습니다.
+
+관련 코드:
 
 - `Scripts/Systems/Blackboard/GameProgressBlackboard.cs`
 - `Scripts/Systems/Blackboard/BlackboardCondition.cs`
@@ -53,11 +48,7 @@ flowchart LR
 - `Scripts/Editor/Blackboard/BlackboardSchemaEditor.cs`
 - `Scripts/Editor/Blackboard/BlackboardDefaultsEditor.cs`
 
-키별 자료형을 스키마에 정의하고 기본값과 실제 런타임 값을 분리했습니다. Unity 직렬화 제약 때문에 하나의 `object` 값을 저장하는 대신 지원 자료형별 값을 명시적으로 보관하는 구조를 사용했습니다.
-
 ### 데이터 기반 마스코트 반응 시스템
-
-마스코트의 반응 조건을 게임 코드에 개별적으로 하드코딩하는 대신 조건 객체를 조합해 표현할 수 있도록 만들었습니다.
 
 ```mermaid
 flowchart LR
@@ -69,18 +60,9 @@ flowchart LR
     D -->|아니오| G[다음 조건 확인]
 ```
 
-지원한 조건에는 다음과 같은 형태가 있습니다.
+값 비교, AND·OR·NOT, 항상 참, 값 변경 감지 조건을 조합할 수 있게 만들었습니다. 이후 콤보 3·5·7·10회 반응도 기존 조건 조합으로 확장했습니다.
 
-- 블랙보드 값 비교
-- 여러 조건을 모두 만족하는 조건
-- 여러 조건 중 하나를 만족하는 조건
-- 조건 반전
-- 항상 참인 조건
-- 특정 값의 변경 감지
-
-이 구조를 이용해 카드 사용량뿐 아니라 이후 콤보 3, 5, 7, 10회 반응도 기존 조건 조합을 재사용해 추가했습니다.
-
-관련 코드 예시:
+관련 코드:
 
 - `Scripts/Systems/MascotReaction/MascotReactionTable.cs`
 - `Scripts/Systems/MascotReaction/MascotReactionTableEditor.cs`
@@ -89,22 +71,18 @@ flowchart LR
 
 ### Unity 편집기 도구
 
-반응 데이터를 코드에서 직접 수정하지 않아도 되도록 전용 편집기 화면을 만들었습니다.
-
 ```mermaid
 flowchart LR
     A[블랙보드 스키마] --> B[유효한 키만 표시]
     B --> C[키 자료형 확인]
-    C --> D[자료형에 맞는 입력 필드 표시]
+    C --> D[자료형에 맞는 입력 필드]
     D --> E[반응 조건·대사 편집]
     E --> F[JSON 불러오기·저장]
 ```
 
-블랙보드 스키마를 읽어 등록된 키만 선택할 수 있게 하고, 선택한 키의 자료형에 맞는 입력 필드만 표시하도록 구성했습니다. 반응 추가·삭제, 펼치기·접기, JSON 불러오기·저장도 지원했습니다.
+스키마에 등록된 키와 자료형을 기준으로 입력 UI를 제한하고, 반응 추가·삭제와 JSON 불러오기·저장을 지원했습니다.
 
 ## 기존 팀 코드에 수정·연동한 부분
-
-`Scripts/Gameplay/Cards/CardManager.cs`에서 카드 사용 이벤트를 발생시키고, `Scripts/GameFlow/GameManager.cs`에서 카드 사용량과 콤보 값을 블랙보드에 기록하도록 연결했습니다.
 
 ```mermaid
 flowchart LR
@@ -113,11 +91,11 @@ flowchart LR
     C --> D[마스코트 반응 조건 평가]
 ```
 
-이 파일들은 다른 팀원의 게임 로직도 함께 포함하므로 파일 전체를 제 구현으로 설명하지 않습니다.
+`CardManager.cs`와 `GameManager.cs`에는 다른 팀원의 로직도 포함되어 있어, 위 연동 범위만 제 기여로 설명합니다.
 
 ## 팀원 구현으로 구분하는 부분
 
-프로젝트의 범용 `DataManager`, 저장 데이터 구조와 관련 기능은 다른 팀원이 주도한 작업입니다. 코드 보관을 위해 `Scripts/Data/Save` 아래에 포함되어 있지만 제 개인 기여로 설명하지 않습니다.
+범용 `DataManager`와 저장 데이터 구조는 다른 팀원이 주도한 작업입니다. `Scripts/Data/Save`에 보관하지만 제 개인 기여로 설명하지 않습니다.
 
 ## 확인 가능한 커밋
 
@@ -129,6 +107,6 @@ flowchart LR
 
 ## 이 경험에서 보여주고 싶은 점
 
-특정 대사를 몇 개 출력한 기능보다, **게임 상태와 콘텐츠 반응 규칙을 분리하고 새로운 조건을 기존 구조의 조합으로 확장할 수 있게 만든 과정**이 핵심입니다. 런타임 코드뿐 아니라 Unity 편집기 도구까지 함께 만들어 콘텐츠 수정 과정에서 코드 변경을 줄이는 방향으로 설계했습니다.
+핵심은 **게임 상태와 콘텐츠 반응 규칙을 분리하고, 새로운 조건을 기존 구조의 조합으로 확장할 수 있게 만든 것**입니다. 런타임 구조와 함께 편집기 도구까지 만들어 콘텐츠 수정 시 코드 변경을 줄였습니다.
 
-이전에 중단한 게임 모작에서 조건을 조합 가능한 데이터 노드로 표현하는 방식을 개인적으로 분석한 경험이 있었고, 그 아이디어를 이 프로젝트의 요구에 맞게 다시 설계해 적용했습니다. 해당 모작 프로젝트 자체는 이 저장소에 포함하지 않습니다.
+이전에 중단한 게임 모작에서 조건을 조합 가능한 데이터 노드로 표현하는 구조를 분석한 경험을 이 프로젝트의 요구에 맞게 다시 설계해 적용했습니다.
