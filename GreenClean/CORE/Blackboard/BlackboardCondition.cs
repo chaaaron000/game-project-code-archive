@@ -20,7 +20,9 @@ public static class BlackboardCondition
         {
             if (blackboard == null)
             {
-                DebugConsole.LogWarning("[BlackboardCondition.CheckBlackboardValue] blackboard is null");
+                DebugConsole.LogWarning(
+                    "[BlackboardCondition.CheckBlackboardValue] blackboard is null"
+                );
                 return false;
             }
 
@@ -29,54 +31,83 @@ public static class BlackboardCondition
                 value = new BlackboardSerializedValue();
             }
 
-            if (blackboard.TryGet(targetKey, out int intValue)) return Compare(intValue, value.intValue);
-            if (blackboard.TryGet(targetKey, out float floatValue)) return Compare(floatValue, value.floatValue);
-            if (blackboard.TryGet(targetKey, out bool boolValue)) return Compare(boolValue, value.boolValue);
-            if (blackboard.TryGet(targetKey, out string stringValue)) return Compare(stringValue, value.stringValue);
+            if (blackboard.TryGet(targetKey, out int intValue))
+            {
+                return Compare(intValue, value.intValue);
+            }
 
-            DebugConsole.LogWarning($"[BlackboardCondition.CheckBlackboardValue] blackboard value '{targetKey}' was not found.");
+            if (blackboard.TryGet(targetKey, out float floatValue))
+            {
+                return Compare(floatValue, value.floatValue);
+            }
+
+            if (blackboard.TryGet(targetKey, out bool boolValue))
+            {
+                return Compare(boolValue, value.boolValue);
+            }
+
+            if (blackboard.TryGet(targetKey, out string stringValue))
+            {
+                return Compare(stringValue, value.stringValue);
+            }
+
+            DebugConsole.LogWarning(
+                $"[BlackboardCondition.CheckBlackboardValue] blackboard value '{targetKey}' was not found."
+            );
             return false;
         }
 
-        private bool Compare(int left, int right) => compareType switch
+        private bool Compare(int left, int right)
         {
-            CompareType.EQUAL => left == right,
-            CompareType.NOT_EQUAL => left != right,
-            CompareType.GREATER => left > right,
-            CompareType.GREATER_OR_EQUAL => left >= right,
-            CompareType.LESS => left < right,
-            CompareType.LESS_OR_EQUAL => left <= right,
-            _ => false,
-        };
+            return compareType switch
+            {
+                CompareType.EQUAL => left == right,
+                CompareType.NOT_EQUAL => left != right,
+                CompareType.GREATER => left > right,
+                CompareType.GREATER_OR_EQUAL => left >= right,
+                CompareType.LESS => left < right,
+                CompareType.LESS_OR_EQUAL => left <= right,
+                _ => false,
+            };
+        }
 
-        private bool Compare(float left, float right) => compareType switch
+        private bool Compare(float left, float right)
         {
-            CompareType.EQUAL => Mathf.Approximately(left, right),
-            CompareType.NOT_EQUAL => !Mathf.Approximately(left, right),
-            CompareType.GREATER => left > right,
-            CompareType.GREATER_OR_EQUAL => left >= right,
-            CompareType.LESS => left < right,
-            CompareType.LESS_OR_EQUAL => left <= right,
-            _ => false,
-        };
+            return compareType switch
+            {
+                CompareType.EQUAL => Mathf.Approximately(left, right),
+                CompareType.NOT_EQUAL => !Mathf.Approximately(left, right),
+                CompareType.GREATER => left > right,
+                CompareType.GREATER_OR_EQUAL => left >= right,
+                CompareType.LESS => left < right,
+                CompareType.LESS_OR_EQUAL => left <= right,
+                _ => false,
+            };
+        }
 
-        private bool Compare(bool left, bool right) => compareType switch
+        private bool Compare(bool left, bool right)
         {
-            CompareType.EQUAL => left == right,
-            CompareType.NOT_EQUAL => left != right,
-            _ => false,
-        };
+            return compareType switch
+            {
+                CompareType.EQUAL => left == right,
+                CompareType.NOT_EQUAL => left != right,
+                _ => false,
+            };
+        }
 
-        private bool Compare(string left, string right) => compareType switch
+        private bool Compare(string left, string right)
         {
-            CompareType.EQUAL => left == right,
-            CompareType.NOT_EQUAL => left != right,
-            CompareType.GREATER => string.CompareOrdinal(left, right) > 0,
-            CompareType.GREATER_OR_EQUAL => string.CompareOrdinal(left, right) >= 0,
-            CompareType.LESS => string.CompareOrdinal(left, right) < 0,
-            CompareType.LESS_OR_EQUAL => string.CompareOrdinal(left, right) <= 0,
-            _ => false,
-        };
+            return compareType switch
+            {
+                CompareType.EQUAL => left == right,
+                CompareType.NOT_EQUAL => left != right,
+                CompareType.GREATER => string.CompareOrdinal(left, right) > 0,
+                CompareType.GREATER_OR_EQUAL => string.CompareOrdinal(left, right) >= 0,
+                CompareType.LESS => string.CompareOrdinal(left, right) < 0,
+                CompareType.LESS_OR_EQUAL => string.CompareOrdinal(left, right) <= 0,
+                _ => false,
+            };
+        }
     }
 
     [System.Serializable]
@@ -91,11 +122,16 @@ public static class BlackboardCondition
             {
                 if (condition == null)
                 {
-                    DebugConsole.LogWarning("[BlackboardCondition.And] condition is null");
+                    DebugConsole.LogWarning($"[BlackboardCondition.And] condition is null");
                     continue;
                 }
-                if (!condition.Evaluate(blackboard)) return false;
+
+                if (!condition.Evaluate(blackboard))
+                {
+                    return false;
+                }
             }
+
             return true;
         }
     }
@@ -112,11 +148,16 @@ public static class BlackboardCondition
             {
                 if (condition == null)
                 {
-                    DebugConsole.LogWarning("[BlackboardCondition.Or] condition is null");
+                    DebugConsole.LogWarning($"[BlackboardCondition.Or] condition is null");
                     continue;
                 }
-                if (condition.Evaluate(blackboard)) return true;
+
+                if (condition.Evaluate(blackboard))
+                {
+                    return true;
+                }
             }
+
             return false;
         }
     }
@@ -131,9 +172,10 @@ public static class BlackboardCondition
         {
             if (condition == null)
             {
-                DebugConsole.LogWarning("[BlackboardCondition.Not] condition is null");
+                DebugConsole.LogWarning($"[BlackboardCondition.Not] condition is null");
                 return false;
             }
+
             return !condition.Evaluate(blackboard);
         }
     }
@@ -141,20 +183,35 @@ public static class BlackboardCondition
     [System.Serializable]
     public sealed class AlwaysTrue : BlackboardConditionBase
     {
-        public override bool Evaluate(GameProgressBlackboard blackboard) => true;
+        public override bool Evaluate(GameProgressBlackboard blackboard)
+        {
+            return true;
+        }
     }
 
     [System.Serializable]
     public sealed class IsValueChanged : BlackboardConditionBase
     {
         public BlackboardKey targetKey;
+
         private bool hasPreviousValue;
         private object previousValue;
 
         public override bool Evaluate(GameProgressBlackboard blackboard)
         {
-            if (blackboard == null) return false;
-            if (!TryGetValue(blackboard, out object currentValue)) return false;
+            if (blackboard == null)
+            {
+                DebugConsole.LogWarning("[BlackboardCondition.IsValueChanged] blackboard is null");
+                return false;
+            }
+
+            if (!TryGetValue(blackboard, out object currentValue))
+            {
+                DebugConsole.LogWarning(
+                    $"[BlackboardCondition.IsValueChanged] blackboard value '{targetKey}' was not found."
+                );
+                return false;
+            }
 
             if (!hasPreviousValue)
             {
@@ -170,10 +227,30 @@ public static class BlackboardCondition
 
         private bool TryGetValue(GameProgressBlackboard blackboard, out object value)
         {
-            if (blackboard.TryGet(targetKey, out int intValue)) { value = intValue; return true; }
-            if (blackboard.TryGet(targetKey, out float floatValue)) { value = floatValue; return true; }
-            if (blackboard.TryGet(targetKey, out bool boolValue)) { value = boolValue; return true; }
-            if (blackboard.TryGet(targetKey, out string stringValue)) { value = stringValue; return true; }
+            if (blackboard.TryGet(targetKey, out int intValue))
+            {
+                value = intValue;
+                return true;
+            }
+
+            if (blackboard.TryGet(targetKey, out float floatValue))
+            {
+                value = floatValue;
+                return true;
+            }
+
+            if (blackboard.TryGet(targetKey, out bool boolValue))
+            {
+                value = boolValue;
+                return true;
+            }
+
+            if (blackboard.TryGet(targetKey, out string stringValue))
+            {
+                value = stringValue;
+                return true;
+            }
+
             value = null;
             return false;
         }
@@ -181,7 +258,10 @@ public static class BlackboardCondition
         private static bool IsChanged(object previous, object current)
         {
             if (previous is float previousFloat && current is float currentFloat)
+            {
                 return !Mathf.Approximately(previousFloat, currentFloat);
+            }
+
             return !Equals(previous, current);
         }
     }
