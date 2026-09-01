@@ -1,8 +1,19 @@
 # Poltergeist
 
-첫 Unity 팀 프로젝트의 C# 스크립트를 보관한 폴더입니다. 현재 31개 C# 파일을 보관하고 있으며, 최신 기술력을 보여주는 대표작보다는 **처음 게임을 완성하고 Git 협업을 경험한 출발점**으로 설명하는 프로젝트입니다.
+첫 Unity 팀 프로젝트의 C# 스크립트를 보관한 폴더입니다. 현재 31개 C# 파일을 기능과 책임 기준으로 다시 분류해 두었으며, 최신 기술력을 보여주는 대표작보다는 **처음 게임을 완성하고 Git 협업을 경험한 출발점**으로 설명하는 프로젝트입니다.
 
-> `Scripts` 폴더의 모든 파일을 제가 작성한 것은 아닙니다. 오래된 팀 프로젝트라 작성자를 확실히 구분하기 어려운 코드는 제 개인 기여로 설명하지 않습니다.
+> `Scripts` 폴더의 모든 파일을 제가 작성한 것은 아닙니다. 오래된 팀 프로젝트라 작성자를 확실히 구분하기 어려운 코드는 제 개인 기여로 설명하지 않습니다. 이 저장소의 폴더 구조는 포트폴리오 열람을 위해 다시 정리한 것이므로 원본 Unity 프로젝트의 경로와 다를 수 있습니다.
+
+## 코드 폴더 구조
+
+- `Scripts/Gameplay/InfiniteLoop` — 반복 복도와 공포 연출
+- `Scripts/Gameplay/Interaction` — 문과 오브젝트 상호작용
+- `Scripts/Gameplay/Player` — 플레이어 조작과 사용 입력
+- `Scripts/Gameplay/Inventory` — 인벤토리와 아이템
+- `Scripts/GameFlow` — 장면 전환과 게임 시작
+- `Scripts/Audio` — 오디오 제어
+- `Scripts/UI` — 화면 표시
+- `Scripts/Legacy/Misc` — 역할이 불분명하거나 현재 포트폴리오에서 강조하지 않는 과거 코드
 
 ## 이 프로젝트에서 맡은 주요 작업
 
@@ -23,10 +34,10 @@ GitHub 작성자 `chaaaron000`으로 확인했습니다.
 
 현재 관련 코드 예시:
 
-- `Scripts/Dongguk_Project/Scripts/InfiniteLoop/GhostAnimation.cs`
-- `Scripts/Dongguk_Project/Scripts/InfiniteLoop/LoopFiveJumpScare.cs`
-- `Scripts/Dongguk_Project/Scripts/InfiniteLoop/LoopFourSofa.cs`
-- `Scripts/Dongguk_Project/Scripts/InfiniteLoop/LoopSevenChasing.cs`
+- `Scripts/Gameplay/InfiniteLoop/GhostAnimation.cs`
+- `Scripts/Gameplay/InfiniteLoop/LoopFiveJumpScare.cs`
+- `Scripts/Gameplay/InfiniteLoop/LoopFourSofa.cs`
+- `Scripts/Gameplay/InfiniteLoop/LoopSevenChasing.cs`
 
 각 파일은 이후 팀원 수정이 섞였을 가능성이 있으므로 현재 파일 전체보다 개별 커밋으로 확인되는 구현 범위를 우선해 설명합니다.
 
@@ -36,7 +47,7 @@ GitHub 작성자 `chaaaron000`으로 확인했습니다.
 
 GitHub 작성자 `chaaaron000`으로 확인했습니다.
 
-- `Scripts/Dongguk_Project/Scripts/DoorOpenClose.cs` 추가
+- `Scripts/Gameplay/Interaction/DoorOpenClose.cs` 추가
 - 열 수 없는 문, 열쇠 문, 퀴즈 문, 지하실 문 등의 종류별 동작 분기
 - 플레이어의 레이캐스트 상호작용과 문 동작 연결
 
