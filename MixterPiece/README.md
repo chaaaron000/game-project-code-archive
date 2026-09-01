@@ -1,11 +1,11 @@
 # MixterPiece
 
-AI 활용 게임 개발 대회 출품을 목적으로 만든 논리 퍼즐 게임입니다. 팀 프로젝트의 C# 스크립트 59개를 기능과 책임 기준으로 다시 분류해 보관하고, 제가 직접 구현하거나 수정한 부분과 팀원 구현을 구분해 정리합니다.
+AI 활용 게임 개발 대회 출품을 목적으로 만든 논리 퍼즐 게임입니다. 팀 프로젝트의 C# 스크립트를 포트폴리오 열람용으로 다시 분류하고, 제 기여 범위를 구분해 정리합니다.
 
 - [원본 공개 저장소](https://github.com/chaaaron000/nan2026)
 - [브라우저에서 플레이](https://chaaaron000.github.io/nan2026/)
 
-> `Scripts` 폴더의 모든 파일을 제가 작성한 것은 아닙니다. 특히 퍼즐 핵심 알고리즘과 명령·되돌리기 구조 일부는 팀원 구현이므로 제 개인 기여로 설명하지 않습니다. 이 저장소의 폴더 구조는 포트폴리오 열람을 위해 다시 정리한 것이므로 원본 Unity 프로젝트의 경로와 다를 수 있습니다.
+> `Scripts`의 모든 파일을 제가 작성한 것은 아닙니다. 퍼즐 핵심 알고리즘과 명령·되돌리기 구조 일부는 팀원 구현이며, 폴더 경로는 원본 Unity 프로젝트와 다를 수 있습니다.
 
 ## 전체 구조
 
@@ -20,23 +20,14 @@ flowchart LR
     F[게임 진행] --> D
 ```
 
-## 코드 폴더 구조
+## 코드 위치
 
-- `Scripts/Gameplay/Grid` — 격자 상태와 화면 표시
-- `Scripts/Gameplay/Paint` — 물감 배치와 확산
-- `Scripts/Gameplay/Commands` — 명령과 되돌리기
-- `Scripts/Gameplay/Stage` — 스테이지 데이터와 진행
-- `Scripts/UI` — 설정, 제목, 스테이지 선택과 미리보기
-- `Scripts/Settings` — 게임 설정과 접근성
-- `Scripts/Audio` — 배경음·효과음과 오디오 믹서 연동
-- `Scripts/GameFlow` — 장면 전환
-- `Scripts/Editor` — Unity 편집기 전용 도구
-- `Scripts/Common` — 공통 기반 코드
+- `Scripts/Gameplay` — 격자, 물감, 명령, 스테이지
+- `Scripts/UI`, `Scripts/Settings`, `Scripts/Audio` — 사용자 설정과 표시
+- `Scripts/GameFlow`, `Scripts/Editor`, `Scripts/Common` — 진행과 보조 구조
 - `AI개발지침` — AI 작업 규칙과 Unity 검증 절차
 
 ## AI를 개발 과정에 활용한 방식
-
-이 프로젝트에서는 AI를 단순 코드 자동완성 도구로 쓰기보다, 프로젝트 지식을 정리하고 구현 결과를 Unity에서 다시 검증하는 흐름에 연결했습니다.
 
 ```mermaid
 flowchart LR
@@ -50,70 +41,13 @@ flowchart LR
     G -->|아니오| H[작업 완료]
 ```
 
-### 프로젝트 지식을 정리해서 제공
+전체 대화와 자료를 그대로 넣는 대신 프로젝트 규칙·기획·구조를 LLM Wiki로 정리하고, 필요한 문서만 AI의 자료로 제공했습니다. `AI개발지침/AGENTS.md`에는 Unity 작업 방식, C# 변경 후 컴파일·콘솔 확인, 로그·주석 규칙 등을 저장소 수준 지침으로 고정했습니다.
 
-전체 대화와 자료를 매번 그대로 넣는 대신 프로젝트 규칙, 구조, 기획 내용을 LLM Wiki 형태로 정리했습니다.
-
-```mermaid
-flowchart LR
-    A[원문 자료와 회의 내용] --> B[LLM Wiki]
-    B --> C[프로젝트 규칙]
-    B --> D[게임 기획]
-    B --> E[구현 구조]
-    C --> F[AI가 참고할 제한된 자료]
-    D --> F
-    E --> F
-```
-
-기획 검토에서는 이 정리된 문서만 Google Drive 자료로 제공해 AI가 현재 프로젝트의 규칙과 맥락을 기준으로 답하도록 했습니다.
-
-### 개발 규칙을 저장소 지침으로 고정
-
-`AI개발지침/AGENTS.md`에는 AI가 작업할 때 따라야 하는 프로젝트 규칙을 남겼습니다.
-
-```mermaid
-flowchart LR
-    A[저장소 작업 지침] --> B[문서 위치 규칙]
-    A --> C[Unity 작업 규칙]
-    A --> D[로그·주석 규칙]
-    C --> E[코딩 에이전트 작업]
-    B --> E
-    D --> E
-```
-
-예를 들면 다음과 같습니다.
-
-- Wiki와 문서의 위치와 사용 규칙
-- Unity 프로젝트 수정 방식
-- C# 변경 후 Unity 컴파일과 콘솔 확인
-- 로그 작성 규칙
-- 공개 API 문서 주석과 중요 로직 주석 규칙
-
-작업할 때마다 같은 지시를 반복하는 대신 저장소 수준의 개발 규칙으로 고정했습니다.
-
-### Unity에서 결과를 다시 검증
-
-AI가 C# 코드를 수정한 뒤 `unity-cli`를 이용해 Unity 편집기 새로고침과 컴파일을 실행하고, 콘솔의 오류와 경고를 확인하도록 작업 흐름을 구성했습니다.
-
-```mermaid
-flowchart LR
-    A[AI가 C# 수정] --> B[Unity 편집기 새로고침]
-    B --> C[스크립트 컴파일]
-    C --> D[콘솔 오류·경고 확인]
-    D --> E{문제 있음}
-    E -->|예| A
-    E -->|아니오| F[다음 작업]
-```
-
-이 경험에서 강조하려는 것은 단순히 AI가 코드를 작성했다는 점이 아니라, **AI가 참고할 지식과 작업 규칙을 정하고 실제 엔진에서 결과를 검증하는 과정까지 개발 흐름에 포함했다는 점**입니다.
+핵심은 **AI에게 작업을 맡기는 것뿐 아니라, 제공할 맥락과 작업 규칙을 제한하고 실제 Unity 결과로 다시 검증하는 흐름을 만든 것**입니다.
 
 ## 직접 변경이 확인된 코드
 
 ### 격자 벽 데이터와 이동 검사
-
-커밋 `00f94ec7e20ba9ca3c5517368d6adca6258f4cc8`
-
-GitHub 작성자 `chaaaron000`으로 확인했습니다.
 
 ```mermaid
 flowchart LR
@@ -125,23 +59,19 @@ flowchart LR
     C --> G[GridView에서 벽 표시]
 ```
 
-- `GridState`에 벽 좌표 데이터와 이동 가능 여부 검사 추가
-- 격자 방향을 좌표 변화량으로 변환하는 구조 추가
-- 벽 표시를 위한 데이터 흐름 연결
+- 커밋 `00f94ec7e20ba9ca3c5517368d6adca6258f4cc8`
+- `GridState`에 벽 데이터와 이동 가능 여부 검사 추가
+- 방향을 좌표 변화량으로 변환하고 `GridView`의 벽 표시와 연결
 
-관련 현재 코드:
+관련 코드:
 
 - `Scripts/Gameplay/Grid/GridState.cs`
 - `Scripts/Gameplay/Grid/GridDirection.cs`
 - `Scripts/Gameplay/Grid/GridView.cs`
 
-`GridState` 자체의 최초 구현은 팀 코드이므로 파일 전체가 아니라 위 커밋에서 추가·수정한 벽 관련 기능을 제 기여로 설명합니다.
+`GridState` 최초 구현은 팀 코드이므로 벽 관련 변경 범위만 제 기여로 설명합니다.
 
 ### 게임 설정 화면
-
-커밋 `1074c5f327f49b10629d73cc8e8661912b637bb1`
-
-GitHub 작성자 `chaaaron000`으로 확인했습니다.
 
 ```mermaid
 flowchart LR
@@ -152,13 +82,10 @@ flowchart LR
     D --> F[오디오 믹서에 적용]
 ```
 
-게임 설정 화면과 접근성 표시 관련 흐름을 구현·연결했습니다.
+- 커밋 `1074c5f327f49b10629d73cc8e8661912b637bb1`
+- 설정 화면과 접근성 표시 흐름 구현·연결
 
 ### 오디오 믹서와 볼륨 설정 저장
-
-커밋 `05e31644d1cb55db30a80f2851df4b322d6014d2`
-
-GitHub 작성자 `chaaaron000`으로 확인했습니다.
 
 ```mermaid
 flowchart LR
@@ -169,30 +96,26 @@ flowchart LR
     F --> B
 ```
 
-- 전체·배경음·효과음 볼륨을 Unity 오디오 믹서에 연결
-- `PlayerPrefs`에 사용자 볼륨 설정 저장
+- 커밋 `05e31644d1cb55db30a80f2851df4b322d6014d2`
+- 전체·배경음·효과음 볼륨을 오디오 믹서에 연결
 - 첫 실행 기본값과 저장된 사용자 설정을 구분해 적용
-- `SoundLibrary`, `SoundManager`, `GameSettingsService` 연동
 
-대표 코드:
+관련 코드:
 
 - `Scripts/Audio/SoundManager.cs`
 - `Scripts/Audio/SoundLibrary.cs`
 - `Scripts/Settings/GameSettingsService.cs`
 
+위 세 커밋은 GitHub 작성자가 `chaaaron000`으로 확인됐습니다.
+
 ## 팀원 구현으로 확인된 주요 코드
 
-다음 코드는 프로젝트 맥락 보존을 위해 함께 보관하지만 제 개인 구현으로 설명하지 않습니다.
+- `PaintSpreadCalculator.cs`의 주요 물감 확산 탐색 — 팀원 `AripyKSU`
+- `PaintBucketUseCommand.cs`와 초기 명령·되돌리기 흐름 — 팀원 `AripyKSU`
+- 물감통 예약 처리와 색약 보정 재질 관련 주요 작업 — 팀원 구현
 
-- `Scripts/Gameplay/Paint/PaintSpreadCalculator.cs` — 벽을 고려한 물감 확산 탐색의 주요 구현은 팀원 `AripyKSU`
-- `Scripts/Gameplay/Commands/PaintBucketUseCommand.cs`와 초기 명령·되돌리기 흐름 — 주요 초기 구현은 팀원 `AripyKSU`
-- 물감통 대기열과 예약 처리 관련 주요 작업 — 팀원 구현
-- 색약 보정 재질 관련 주요 작업 — 팀원 구현
-
-따라서 포트폴리오에서 퍼즐 탐색이나 되돌리기 기능을 언급할 때는 팀 전체 구조를 설명하는 맥락으로만 사용하고, 개인 기술 사례로는 커밋 작성이 확인된 작업을 우선합니다.
+이 기능들은 전체 프로젝트 구조를 설명할 때만 사용하고 개인 기술 사례로 주장하지 않습니다.
 
 ## 이 경험에서 보여주고 싶은 점
 
-MixterPiece는 단순히 AI를 많이 사용한 프로젝트가 아닙니다. **프로젝트 지식 정리 → 필요한 맥락만 제공 → AI를 이용한 기획·구현 → Unity에서 실제 검증**까지 작업 흐름을 설계한 경험으로 설명할 수 있습니다.
-
-동시에 격자 벽 처리, 게임 설정 화면, 오디오 설정처럼 직접 수정한 코드 사례를 함께 보여줘 AI 활용과 제 엔진·코드 판단을 구분해서 설명합니다.
+**프로젝트 지식 정리 → 필요한 맥락 제공 → AI를 이용한 기획·구현 → Unity 검증**까지 하나의 개발 흐름으로 구성한 경험이 핵심입니다. 동시에 실제 코드 기여 범위를 따로 구분해 AI 활용과 제 엔진·코드 판단을 섞어 설명하지 않습니다.
