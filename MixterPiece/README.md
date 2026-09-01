@@ -1,8 +1,22 @@
 # MixterPiece
 
-AI 활용 게임 개발 대회 출품을 목적으로 만든 논리 퍼즐 게임입니다. 팀 프로젝트의 C# 스크립트 59개를 원본 구조에 가깝게 보관하고, 제가 직접 구현하거나 수정한 부분과 팀원 구현을 구분해 정리합니다.
+AI 활용 게임 개발 대회 출품을 목적으로 만든 논리 퍼즐 게임입니다. 팀 프로젝트의 C# 스크립트 59개를 기능과 책임 기준으로 다시 분류해 보관하고, 제가 직접 구현하거나 수정한 부분과 팀원 구현을 구분해 정리합니다.
 
-> `Scripts` 폴더의 모든 파일을 제가 작성한 것은 아닙니다. 특히 퍼즐 핵심 알고리즘과 명령·되돌리기 구조 일부는 팀원 구현이므로 제 개인 기여로 설명하지 않습니다.
+> `Scripts` 폴더의 모든 파일을 제가 작성한 것은 아닙니다. 특히 퍼즐 핵심 알고리즘과 명령·되돌리기 구조 일부는 팀원 구현이므로 제 개인 기여로 설명하지 않습니다. 이 저장소의 폴더 구조는 포트폴리오 열람을 위해 다시 정리한 것이므로 원본 Unity 프로젝트의 경로와 다를 수 있습니다.
+
+## 코드 폴더 구조
+
+- `Scripts/Gameplay/Grid` — 격자 상태와 화면 표시
+- `Scripts/Gameplay/Paint` — 물감 배치와 확산
+- `Scripts/Gameplay/Commands` — 명령과 되돌리기
+- `Scripts/Gameplay/Stage` — 스테이지 데이터와 진행
+- `Scripts/UI` — 설정, 제목, 스테이지 선택과 미리보기
+- `Scripts/Settings` — 게임 설정과 접근성
+- `Scripts/Audio` — 배경음·효과음과 오디오 믹서 연동
+- `Scripts/GameFlow` — 장면 전환
+- `Scripts/Editor` — Unity 편집기 전용 도구
+- `Scripts/Common` — 공통 기반 코드
+- `AI개발지침` — AI 작업 규칙과 Unity 검증 절차
 
 ## AI를 개발 과정에 활용한 방식
 
@@ -64,9 +78,9 @@ GitHub 작성자 `chaaaron000`으로 확인했습니다.
 
 관련 현재 코드:
 
-- `Scripts/Grid/GridState.cs`
-- `Scripts/Grid/GridDirection.cs`
-- `Scripts/Grid/GridView.cs`
+- `Scripts/Gameplay/Grid/GridState.cs`
+- `Scripts/Gameplay/Grid/GridDirection.cs`
+- `Scripts/Gameplay/Grid/GridView.cs`
 
 `GridState` 자체의 최초 구현은 팀 코드이므로 파일 전체가 아니라 위 커밋에서 추가·수정한 벽 관련 기능을 제 기여로 설명합니다.
 
@@ -91,16 +105,16 @@ GitHub 작성자 `chaaaron000`으로 확인했습니다.
 
 대표 코드:
 
-- `Scripts/SoundManager.cs`
-- `Scripts/SoundLibrary.cs`
-- `Scripts/GameSettingsService.cs`
+- `Scripts/Audio/SoundManager.cs`
+- `Scripts/Audio/SoundLibrary.cs`
+- `Scripts/Settings/GameSettingsService.cs`
 
 ## 팀원 구현으로 확인된 주요 코드
 
 다음 코드는 프로젝트 맥락 보존을 위해 함께 보관하지만 제 개인 구현으로 설명하지 않습니다.
 
-- `Scripts/Paint/PaintSpreadCalculator.cs` — 벽을 고려한 물감 확산 탐색의 주요 구현은 팀원 `AripyKSU`
-- `Scripts/Command/PaintBucketUseCommand.cs`와 초기 명령·되돌리기 흐름 — 주요 초기 구현은 팀원 `AripyKSU`
+- `Scripts/Gameplay/Paint/PaintSpreadCalculator.cs` — 벽을 고려한 물감 확산 탐색의 주요 구현은 팀원 `AripyKSU`
+- `Scripts/Gameplay/Commands/PaintBucketUseCommand.cs`와 초기 명령·되돌리기 흐름 — 주요 초기 구현은 팀원 `AripyKSU`
 - 물감통 대기열과 예약 처리 관련 주요 작업 — 팀원 구현
 - 색약 보정 재질 관련 주요 작업 — 팀원 구현
 
