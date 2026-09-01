@@ -1,8 +1,21 @@
 # GreenClean
 
-2주 팀 프로젝트에서 만든 코드를 원본 폴더 구조에 가깝게 보관하고, 그중 제가 직접 구현하거나 수정한 부분을 구분해 정리합니다.
+2주 팀 프로젝트에서 만든 코드를 기능과 책임 기준으로 다시 분류해 보관하고, 그중 제가 직접 구현하거나 수정한 부분을 구분해 정리합니다.
 
-> `Scripts` 폴더에는 팀 프로젝트의 C# 스크립트가 함께 들어 있습니다. 파일이 이 저장소에 있다는 이유만으로 파일 전체를 제가 작성한 것은 아닙니다.
+> `Scripts` 폴더에는 팀 프로젝트의 C# 스크립트가 함께 들어 있습니다. 파일이 이 저장소에 있다는 이유만으로 파일 전체를 제가 작성한 것은 아닙니다. 이 저장소의 폴더 구조는 포트폴리오 열람을 위해 다시 정리한 것이므로 원본 Unity 프로젝트의 경로와 다를 수 있습니다.
+
+## 코드 폴더 구조
+
+- `Scripts/Systems/Blackboard` — 공유 상태와 조건 판정
+- `Scripts/Systems/MascotReaction` — 마스코트 반응 데이터와 실행 구조
+- `Scripts/Editor/Blackboard` — 블랙보드 편집기 도구
+- `Scripts/Editor/MascotReaction` — 마스코트 반응 편집기 도구
+- `Scripts/Gameplay/Cards` — 카드와 덱
+- `Scripts/Gameplay/Grid` — 타일과 격자
+- `Scripts/GameFlow` — 전체 게임 진행과 장면 관리
+- `Scripts/UI` — 화면 표시
+- `Scripts/Data/Save` — 저장 데이터 관련 팀 코드
+- 그 외 `Audio`, `Settings`, `Common`, `Debug`
 
 ## 제가 주도적으로 구현한 부분
 
@@ -12,12 +25,12 @@
 
 관련 코드 예시:
 
-- `Scripts/Blackboard/GameProgressBlackboard.cs`
-- `Scripts/Blackboard/BlackboardCondition.cs`
-- `Scripts/Blackboard/BlackboardSchema.cs`
-- `Scripts/Blackboard/BlackboardDefaults.cs`
-- `Scripts/Blackboard/Editor/BlackboardSchemaEditor.cs`
-- `Scripts/Blackboard/Editor/BlackboardDefaultsEditor.cs`
+- `Scripts/Systems/Blackboard/GameProgressBlackboard.cs`
+- `Scripts/Systems/Blackboard/BlackboardCondition.cs`
+- `Scripts/Systems/Blackboard/BlackboardSchema.cs`
+- `Scripts/Systems/Blackboard/BlackboardDefaults.cs`
+- `Scripts/Editor/Blackboard/BlackboardSchemaEditor.cs`
+- `Scripts/Editor/Blackboard/BlackboardDefaultsEditor.cs`
 
 키별 자료형을 스키마에 정의하고 기본값과 실제 런타임 값을 분리했습니다. Unity 직렬화 제약 때문에 하나의 `object` 값을 저장하는 대신 지원 자료형별 값을 명시적으로 보관하는 구조를 사용했습니다.
 
@@ -38,10 +51,10 @@
 
 관련 코드 예시:
 
-- `Scripts/MascotReaction/MascotReactionTable.cs`
-- `Scripts/MascotReaction/MascotReactionTableEditor.cs`
-- `Scripts/MascotReaction/Editor/MascotReactionTableEditorInspector.cs`
-- `Scripts/Blackboard/BlackboardCondition.cs`
+- `Scripts/Systems/MascotReaction/MascotReactionTable.cs`
+- `Scripts/Systems/MascotReaction/MascotReactionTableEditor.cs`
+- `Scripts/Editor/MascotReaction/MascotReactionTableEditorInspector.cs`
+- `Scripts/Systems/Blackboard/BlackboardCondition.cs`
 
 ### Unity 편집기 도구
 
@@ -49,11 +62,11 @@
 
 ## 기존 팀 코드에 수정·연동한 부분
 
-`CardManager`에서 카드 사용 이벤트를 발생시키고, `GameManager`에서 카드 사용량과 콤보 값을 블랙보드에 기록하도록 연결했습니다. 이 파일들은 다른 팀원의 게임 로직도 함께 포함하므로 파일 전체를 제 구현으로 설명하지 않습니다.
+`Scripts/Gameplay/Cards/CardManager.cs`에서 카드 사용 이벤트를 발생시키고, `Scripts/GameFlow/GameManager.cs`에서 카드 사용량과 콤보 값을 블랙보드에 기록하도록 연결했습니다. 이 파일들은 다른 팀원의 게임 로직도 함께 포함하므로 파일 전체를 제 구현으로 설명하지 않습니다.
 
 ## 팀원 구현으로 구분하는 부분
 
-프로젝트의 범용 `DataManager`, 저장 데이터 구조와 관련 기능은 다른 팀원이 주도한 작업입니다. 코드 보관을 위해 `Scripts/Utility` 아래에 포함되어 있지만 제 개인 기여로 설명하지 않습니다.
+프로젝트의 범용 `DataManager`, 저장 데이터 구조와 관련 기능은 다른 팀원이 주도한 작업입니다. 코드 보관을 위해 `Scripts/Data/Save` 아래에 포함되어 있지만 제 개인 기여로 설명하지 않습니다.
 
 ## 확인 가능한 커밋
 
