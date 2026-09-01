@@ -1,91 +1,67 @@
 # Nostalgia
 
-장기 팀 프로젝트의 C# 스크립트 **231개 전체**를 맥락 보존용으로 모았습니다. Photon Fusion 기반 멀티플레이, Vivox 음성 채팅, 몹 상태 구조 리팩터링 등 다양한 작업이 섞여 있으므로 아래에서 확인된 개인 기여만 구분합니다.
+장기 팀 프로젝트의 C# 스크립트를 원본 폴더 구조에 가깝게 보관하고, 그중 제가 직접 구현하거나 기존 코드를 수정한 부분을 구분해 정리합니다.
 
-> `Scripts/`에 존재하는 모든 파일을 제가 작성한 것은 아닙니다.
+> `Scripts` 폴더에는 여러 팀원이 작성한 코드가 함께 들어 있습니다. 파일이 이 저장소에 포함되어 있다는 이유만으로 파일 전체를 제가 작성한 것은 아닙니다.
 
-## Portfolio focus
+## 제가 담당한 주요 작업
 
-- Photon Fusion 기반 세션 / 로비 / Shared Mode 멀티플레이 개발 경험
-- Vivox positional voice chat을 게임 세션과 연결
-- 기존 Coroutine 중심 몹 행동을 Fusion FSM 기반 상태 구조로 리팩터링
-- 장기 팀 프로젝트에서 기존 코드와 제3자 SDK 위에 기능을 추가하고 유지한 경험
+### Photon Fusion 기반 멀티플레이 기능
 
-## 중요한 소유권 구분 — Expressionless
+프로젝트의 멀티플레이 구조를 다루면서 세션 생성·참가, 로비, Shared 방식 실행, 플레이어 선택과 네트워크 객체 관리 등을 작업했습니다. 이후 음성 채팅은 Vivox의 위치 기반 채널을 게임 세션과 연결했습니다.
 
-### 초기 몹 알고리즘은 팀원 구현
+관련 코드가 포함된 위치:
 
-커밋 `339eb57783803693ae2cf30e2756030917093367`
+- `Scripts/Network`
+- `Scripts/Vivox`
+- `Scripts/SelectCharacterManager.cs`
 
-> Expressionless 알고리즘 구현
+장기간 여러 사람이 수정한 파일에는 팀 코드와 SDK 예제에서 출발한 부분이 섞여 있을 수 있으므로, 해당 폴더나 파일 전체를 제 구현이라고 설명하지 않습니다. 면접과 포트폴리오에서는 제가 실제로 추가하거나 변경한 기능의 범위만 설명합니다.
 
-GitHub 작성자: **AripyKSU**
+### 기존 몬스터 행동 구조를 Fusion 상태 머신으로 변경
 
-따라서 `Scripts/Entity/Expressionless.cs`의 초기 몹 알고리즘 자체를 개인 구현으로 주장하지 않습니다.
+`Expressionless` 몬스터의 최초 행동 알고리즘은 제가 만든 코드가 아닙니다.
 
-### Fusion FSM 리팩터링은 직접 구현
+초기 구현 커밋:
 
-커밋 `fc7134720ce37d8ac652dd4e9aba5fe79d5346f0`
+- `339eb57783803693ae2cf30e2756030917093367` — `Expressionless 알고리즘 구현`
+- GitHub 작성자: `AripyKSU`
 
-> FSM 테스팅 중
+이후 저는 기존 행동을 Photon Fusion의 상태 머신 구조에 맞게 나누는 작업을 했습니다.
 
-GitHub 작성자: **chaaaron000**
+관련 커밋:
 
-이 커밋에서 기존 행동을 `Fusion.Addons.FSM` 구조로 옮기기 위해 다음 코드를 추가했습니다.
+- `fc7134720ce37d8ac652dd4e9aba5fe79d5346f0` — `FSM 테스팅 중`
+- GitHub 작성자: `chaaaron000`
+
+이 작업에서 `ExpressionlessAI`가 상태 머신을 구성하고, 대기·경계·추적·공격을 별도의 상태와 행동 코드로 분리했습니다.
+
+관련 코드:
 
 - `Scripts/Entity/Expressionless/ExpressionlessAI.cs`
-- `Scripts/Entity/Expressionless/ExpressionlessAlertBehaviour.cs`
-- `Scripts/Entity/Expressionless/ExpressionlessAttackBehaviour.cs`
-- `Scripts/Entity/Expressionless/ExpressionlessChaseBehaviour.cs`
-- `Scripts/Entity/Expressionless/ExpressionlessIdleBehaviour.cs`
+- `Scripts/Entity/Expressionless/ExpressionlessIdleState.cs`
+- `Scripts/Entity/Expressionless/ExpressionlessAlertState.cs`
+- `Scripts/Entity/Expressionless/ExpressionlessChaseState.cs`
+- `Scripts/Entity/Expressionless/ExpressionlessAttackState.cs`
+- 각 상태에 대응하는 행동 코드
 
-포트폴리오에서는 이를 **“몹 AI를 처음부터 구현”**이라고 설명하지 않고,
+Photon에서 제공하는 상태 머신 부가 기능의 원본 구현은 제 코드가 아니며, 이 저장소에서는 프로젝트가 사용한 호출·상속 코드만 보관합니다.
 
-> 기존 Coroutine/상태 로직을 분석하고, 네트워크 환경에서 상태와 전이를 더 명시적으로 관리하기 위해 Fusion FSM 구조로 리팩터링
+### Vivox 연동
 
-한 경험으로 설명합니다.
+확인 가능한 제 커밋 예시는 다음과 같습니다.
 
-Photon의 `Fusion.Addons.FSM` 구현 소스 자체는 제3자 코드이며 이 아카이브의 `Scripts/`에 포함하지 않았습니다.
+- `f1ceda3bc615179178f782ca39364142957764a8` — 게임 세션 이름을 이용한 Vivox 위치 기반 채널 참가 연동
+- `a38e79858af69ddbf164280209e1cf73b78772e2` — Vivox 입출력 장치 변경과 설정 화면 연동
 
-## Vivox / network integration — 직접 변경 확인
+두 커밋 모두 GitHub 작성자가 `chaaaron000`으로 확인됐습니다.
 
-### 세션과 positional channel 연결
+## 제가 설명하지 않는 부분
 
-커밋 `f1ceda3bc615179178f782ca39364142957764a8`
+초기 `Expressionless` 몬스터 알고리즘처럼 다른 팀원이 먼저 구현한 기능은 제 작업으로 주장하지 않습니다. 또한 장기 프로젝트 특성상 여러 사람이 수정한 `NetworkManager`, `VivoxManager` 등의 현재 파일 전체를 제 코드라고 표현하지 않습니다.
 
-> Vivox 채널 참여 추가
+## 이 경험에서 보여주고 싶은 점
 
-GitHub 작성자 `chaaaron000` 확인.
+이 프로젝트에서 강조할 부분은 몬스터 인공지능을 처음부터 혼자 만들었다는 이야기가 아닙니다. **이미 동작하던 팀 코드를 이해한 뒤, 멀티플레이 프로젝트의 요구에 맞춰 상태와 책임을 다시 나누고 기존 기능을 새로운 구조로 옮긴 경험**이 핵심입니다.
 
-- 게임 생성/참가 성공 시 Fusion session name을 Vivox positional channel name으로 사용
-- Steam 사용자 이름을 Vivox 로그인 이름과 연결
-
-관련 현재 파일:
-
-- `Scripts/Network/NetworkManager.cs`
-- `Scripts/Vivox/VivoxManager.cs`
-
-### 음성 입출력 장치 설정
-
-커밋 `a38e79858af69ddbf164280209e1cf73b78772e2`
-
-> Vivox 입출력 장치 변경 기능 추가 및 메인 메뉴 세팅 버튼 이벤트 연결
-
-GitHub 작성자 `chaaaron000` 확인.
-
-Vivox 입력/출력 장치 선택과 설정 UI 연동을 추가했습니다.
-
-## 공동 수정 파일에 대한 원칙
-
-`NetworkManager.cs`, `VivoxManager.cs`, `GameManager.cs`처럼 프로젝트 전체 기간 동안 여러 사람이 수정한 파일은 **파일 전체를 개인 구현으로 표시하지 않습니다.** 포트폴리오에서는 commit으로 확인 가능한 기능 단위만 기여로 설명합니다.
-
-그 외 231개 스크립트는 프로젝트 구조와 코드 맥락을 보존하기 위해 함께 두었으며, 필요한 경우 포트폴리오 제작 과정에서 파일별 commit 이력을 추가 확인합니다.
-
-## Recommended portfolio story
-
-Nostalgia는 다음 두 축으로 설명하는 것이 가장 정확합니다.
-
-1. **멀티플레이 기술 선택과 통합** — Photon Fusion, 세션/로비, Vivox 등 실제 멀티플레이 프로젝트에서 SDK와 게임 흐름을 연결한 경험
-2. **기존 코드 리팩터링** — 팀원이 만든 몹 행동을 이해한 뒤 Fusion FSM으로 상태 책임을 분리한 경험
-
-즉 새 기능을 혼자 처음부터 만드는 능력보다, **규모가 커진 팀 프로젝트의 기존 코드를 읽고 구조를 바꾸며 외부 네트워크 기술과 연결한 경험**을 보여주는 프로젝트입니다.
+네트워크 기술을 선택하고 세션·음성 채팅을 연결한 경험은 별도의 사례로 설명할 수 있습니다.
