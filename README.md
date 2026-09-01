@@ -35,13 +35,13 @@
 
 ## 프로젝트
 
-| 프로젝트 | C# 파일 수 | 주요 내용 | 보관 범위 |
-|---|---:|---|---|
-| [GreenClean](./GreenClean/README.md) | 63 | 블랙보드, 데이터 기반 조건, Unity 편집기 도구 | 프로젝트 C# 스크립트 전체 |
-| [Nostalgia](./Nostalgia/README.md) | 231 | Photon Fusion 멀티플레이, Vivox, 몬스터 상태 구조 리팩터링 | 프로젝트 C# 스크립트 전체 |
-| [MixterPiece](./MixterPiece/README.md) | 59 | 퍼즐 구조, 설정·사운드, AI 보조 개발 흐름 | 프로젝트 C# 스크립트 전체 |
-| [비주얼 노벨 개발](./VisualNovelDev/README.md) | — | AI가 수정한 `.nani` 스크립트의 LSP 진단과 배치 검증 | 라이선스 문제가 없는 설명 문서만 |
-| [Poltergeist](./Poltergeist/README.md) | 31 | 첫 Unity 팀 프로젝트, 반복 복도와 상호작용 구현 | 제3자 에셋 코드를 제외한 프로젝트 C# 스크립트 |
+| 프로젝트 | C# 파일 수 | 주요 내용 | 보관 범위 | 공개 자료 |
+|---|---:|---|---|---|
+| [GreenClean](./GreenClean/README.md) | 63 | 블랙보드, 데이터 기반 조건, Unity 편집기 도구 | 프로젝트 C# 스크립트 전체 | — |
+| [Nostalgia](./Nostalgia/README.md) | 231 | Photon Fusion 멀티플레이, Vivox, 몬스터 상태 구조 리팩터링 | 프로젝트 C# 스크립트 전체 | — |
+| [MixterPiece](./MixterPiece/README.md) | 59 | 퍼즐 구조, 설정·사운드, AI 보조 개발 흐름 | 프로젝트 C# 스크립트 전체 | [원본 저장소](https://github.com/chaaaron000/nan2026) · [플레이](https://chaaaron000.github.io/nan2026/) |
+| [비주얼 노벨 개발](./VisualNovelDev/README.md) | — | Penpot·React 게임 시스템 프로토타입, AI `.nani` LSP 검증 | 라이선스 문제가 없는 설명 문서만 | [프로토타입 저장소](https://github.com/chaaaron000/beyond-the-screen-prototype) · [실행](https://chaaaron000.github.io/beyond-the-screen-prototype/) · [Penpot](https://design.penpot.app/#/workspace?team-id=502b4555-3f5f-807a-8008-8a29dee3d6e7&file-id=502b4555-3f5f-807a-8008-8a2a27c83963&page-id=502b4555-3f5f-807a-8008-8a2a27c83964) |
+| [Poltergeist](./Poltergeist/README.md) | 31 | 첫 Unity 팀 프로젝트, 반복 복도와 상호작용 구현 | 제3자 에셋 코드를 제외한 프로젝트 C# 스크립트 | — |
 
 총 **384개의 C# 스크립트**를 보관하고 있으며, 비주얼 노벨 프로젝트는 상용 에셋의 소스나 배포물을 복사하지 않고 개발·검증 흐름만 문서화했습니다.
 
