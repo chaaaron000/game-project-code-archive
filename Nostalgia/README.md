@@ -1,22 +1,36 @@
 # Nostalgia
 
-장기 팀 프로젝트의 C# 스크립트를 원본 폴더 구조에 가깝게 보관하고, 그중 제가 직접 구현하거나 기존 코드를 수정한 부분을 구분해 정리합니다.
+장기 팀 프로젝트의 C# 스크립트를 기능과 책임 기준으로 다시 분류해 보관하고, 그중 제가 직접 구현하거나 기존 코드를 수정한 부분을 구분해 정리합니다.
 
-> `Scripts` 폴더에는 여러 팀원이 작성한 코드가 함께 들어 있습니다. 파일이 이 저장소에 포함되어 있다는 이유만으로 파일 전체를 제가 작성한 것은 아닙니다.
+> `Scripts` 폴더에는 여러 팀원이 작성한 코드가 함께 들어 있습니다. 파일이 이 저장소에 포함되어 있다는 이유만으로 파일 전체를 제가 작성한 것은 아닙니다. 이 저장소의 폴더 구조는 포트폴리오 열람을 위해 다시 정리한 것이므로 원본 Unity 프로젝트의 경로와 다를 수 있습니다.
+
+## 코드 폴더 구조
+
+- `Scripts/Network/Core` — 세션, 로비, 네트워크 실행과 관리
+- `Scripts/Network/VoiceChat` — Vivox 위치 기반 음성 채팅
+- `Scripts/Network/CharacterSelection` — 멀티플레이 캐릭터 선택
+- `Scripts/AI` — 몬스터 공통 코드와 몬스터별 상태 구조
+- `Scripts/Gameplay` — 플레이어, 맵, 아이템, 추격, 튜토리얼, 싱글 플레이 등
+- `Scripts/GameFlow` — 전체 게임 진행과 장면 관리
+- `Scripts/UI` — 로비, 일지, 게임 오버 등 화면 구성
+- `Scripts/Settings` — 그래픽·사운드·게임 설정
+- `Scripts/Data/Save` — 저장 데이터
+- `Scripts/Platform/Steam` — Steam 연동
+- 그 외 `Audio`, `Editor`, `Common`, `Debug`
 
 ## 제가 담당한 주요 작업
 
 ### Photon Fusion 기반 멀티플레이 기능
 
-프로젝트의 멀티플레이 구조를 다루면서 세션 생성·참가, 로비, 공유 방식 멀티플레이, 플레이어 선택과 네트워크 객체 관리 등을 작업했습니다. 이후 음성 채팅은 Vivox의 위치 기반 채널을 게임 세션과 연결했습니다.
+프로젝트의 멀티플레이 구조를 다루면서 세션 생성·참가, 로비, 공유 방식 실행, 플레이어 선택과 네트워크 객체 관리 등을 작업했습니다. 이후 음성 채팅은 Vivox의 위치 기반 채널을 게임 세션과 연결했습니다.
 
 관련 코드가 포함된 위치:
 
-- `Scripts/Network`
-- `Scripts/Vivox`
-- `Scripts/SelectCharacterManager.cs`
+- `Scripts/Network/Core`
+- `Scripts/Network/VoiceChat`
+- `Scripts/Network/CharacterSelection`
 
-장기간 여러 사람이 수정한 파일에는 팀 코드와 외부 개발 도구 예제에서 출발한 부분이 섞여 있을 수 있으므로, 해당 폴더나 파일 전체를 제 구현이라고 설명하지 않습니다. 면접과 포트폴리오에서는 제가 실제로 추가하거나 변경한 기능의 범위만 설명합니다.
+장기간 여러 사람이 수정한 파일에는 팀 코드와 외부 예제에서 출발한 부분이 섞여 있을 수 있으므로, 해당 폴더나 파일 전체를 제 구현이라고 설명하지 않습니다. 면접과 포트폴리오에서는 제가 실제로 추가하거나 변경한 기능의 범위만 설명합니다.
 
 ### 기존 몬스터 행동 구조를 Fusion 상태 머신으로 변경
 
@@ -31,18 +45,18 @@
 
 관련 커밋:
 
-- `fc7134720ce37d8ac652dd4e9aba5fe79d5346f0` — 상태 머신 구조 시험 및 분리 작업
+- `fc7134720ce37d8ac652dd4e9aba5fe79d5346f0` — `FSM 테스팅 중`
 - GitHub 작성자: `chaaaron000`
 
 이 작업에서 `ExpressionlessAI`가 상태 머신을 구성하고, 대기·경계·추적·공격을 별도의 상태와 행동 코드로 분리했습니다.
 
 관련 코드:
 
-- `Scripts/Entity/Expressionless/ExpressionlessAI.cs`
-- `Scripts/Entity/Expressionless/ExpressionlessIdleState.cs`
-- `Scripts/Entity/Expressionless/ExpressionlessAlertState.cs`
-- `Scripts/Entity/Expressionless/ExpressionlessChaseState.cs`
-- `Scripts/Entity/Expressionless/ExpressionlessAttackState.cs`
+- `Scripts/AI/Expressionless/ExpressionlessAI.cs`
+- `Scripts/AI/Expressionless/ExpressionlessIdleState.cs`
+- `Scripts/AI/Expressionless/ExpressionlessAlertState.cs`
+- `Scripts/AI/Expressionless/ExpressionlessChaseState.cs`
+- `Scripts/AI/Expressionless/ExpressionlessAttackState.cs`
 - 각 상태에 대응하는 행동 코드
 
 Photon에서 제공하는 상태 머신 부가 기능의 원본 구현은 제 코드가 아니며, 이 저장소에서는 프로젝트가 사용한 호출·상속 코드만 보관합니다.
