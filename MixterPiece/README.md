@@ -4,6 +4,7 @@ AI 활용 게임 개발 대회 출품을 목적으로 만든 논리 퍼즐 게�
 
 - [원본 공개 저장소](https://github.com/chaaaron000/nan2026)
 - [브라우저에서 플레이](https://chaaaron000.github.io/nan2026/)
+- [플레이 영상](https://www.youtube.com/watch?v=CswE8Itpmho&feature=youtu.be)
 
 > `Scripts`의 모든 파일을 제가 작성한 것은 아닙니다. 퍼즐 핵심 알고리즘과 명령·되돌리기 구조 일부는 팀원 구현이며, 폴더 경로는 원본 Unity 프로젝트와 다를 수 있습니다.
 
