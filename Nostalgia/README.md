@@ -2,7 +2,12 @@
 
 장기 팀 프로젝트의 C# 코드를 포트폴리오 열람용으로 다시 분류하고, 제가 직접 구현하거나 수정한 범위를 구분해 정리합니다.
 
-<p align="left">
+<p align="center">
+  <a href="https://store.steampowered.com/app/3693270/_/">
+    <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/3693270/header.jpg" width="460" alt="Nostalgia Steam 상점 페이지">
+  </a>
+</p>
+<p align="center">
   <a href="https://store.steampowered.com/app/3693270/_/">
     <img src="https://img.shields.io/badge/Steam-상점에서%20보기-171a21?style=for-the-badge&logo=steam&logoColor=white" alt="Steam에서 Nostalgia 보기">
   </a>
